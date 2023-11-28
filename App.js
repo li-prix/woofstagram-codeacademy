@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     paddingTop: 20,
     paddingBottom: 12,
-    paddingLeft: 24,
+    paddingLeft: 12,
     color: "#08060B",
   },
   title: {
@@ -37,6 +37,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "600",
     textTransform: "uppercase",
+  },
+  contentContainer: {
+    padding: 2,
+    backgroundColor: "beige",
   },
 });
 
@@ -54,13 +58,13 @@ const WoofCard = (props) => (
 const woofCardStyles = StyleSheet.create({
   card: {
     width: 88,
-    height: 112,
-    padding: 12,
-    marginRight: 16,
+    height: 120,
+    margin: 6,
     borderWidth: 1,
     borderColor: "#E7E3EB",
-    borderRadius: 12,
+    borderRadius: 22,
     alignItems: "center",
+    justifyContent: "center",
     backgroundColor: "#FFF",
     alignContent: "center",
   },
@@ -74,44 +78,60 @@ const woofCardStyles = StyleSheet.create({
 });
 
 const WoofPost = (props) => (
-  <View>
-    <Image source={{ uri: "todo" }} />
-    <View>
-      <Text>todo</Text>
-      <Text>todo</Text>
+  <View style={woofPostStyles.layout}>
+    <Image source={{ uri: props.image }} style={woofPostStyles.image} />
+    <View style={woofPostStyles.content}>
+      <Title>{props.title}</Title>
+      <Text style={woofPostStyles.description} numberOfLines={2}>
+        {props.description}
+      </Text>
     </View>
   </View>
 );
 
 const woofPostStyles = StyleSheet.create({
-  layout: {},
-  image: {},
-  content: {},
-  title: {},
-  description: {},
+  layout: {
+    marginHorizontal: 6,
+    flexDirection: "row",
+    marginVertical: 8,
+    height: 90,
+  },
+  image: {
+    borderRadius: 12,
+    flex: 1,
+  },
+  content: {
+    flex: 2,
+    marginLeft: 10,
+    justifyContent: "center",
+  },
+
+  description: {
+    fontSize: 12,
+    color: "navy",
+    marginTop: 4,
+  },
 });
 
 // The screen rendering everything
 const HomeScreen = () => (
   <ScrollView>
-    <Heading>Tranding Woofs</Heading>
-    <ScrollView horizontal style={{ flex: 1, backgroundColor: "gray" }}>
-      <WoofCard
-        name="Rex"
-        avatar="https://images.unsplash.com/photo-1558788353-f76d92427f16?auto=format&fit=crop&w=648&q=80"
-      />
-      <WoofCard
-        name="Ball"
-        avatar="https://images.unsplash.com/photo-1585584114963-503344a119b0?auto=format&fit=crop&h=64&q=80"
-      />
-      <WoofCard
-        name="Happy"
-        avatar="https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&h=64&q=80"
-      />
-      <WoofCard
-        name="Fluffly"
-        avatar="https://images.unsplash.com/photo-1554956615-1ba6dc39921b?auto=format&fit=crop&h=64&q=80"
-      />
+    <Heading>Trending Woofs</Heading>
+    <ScrollView horizontal contentContainerStyle={styles.contentContainer}>
+      {data.woofs.map((woof) => (
+        <WoofCard key={woof.id} name={woof.name} avatar={woof.avatar} />
+      ))}
+    </ScrollView>
+    <ScrollView>
+      <Heading>New Woof posts</Heading>
+      {data.posts.map((post) => (
+        <WoofPost
+          key={post.id}
+          image={post.image}
+          title={post.title}
+          description={post.description}
+        />
+      ))}
     </ScrollView>
   </ScrollView>
 );
